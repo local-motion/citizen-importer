@@ -33,4 +33,4 @@ python import_citizens.py http://localhost:8082/citizens samples/3_citizens.csv
 
 ### Samples
 
-Samples can be found at (Samples)[./samples] in this repository.
+Samples can be found at [Samples](./samples) in this repository.
