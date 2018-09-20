@@ -29,7 +29,7 @@ Please go through the checklist below before submitting. There's a chance it may
 * Scan the list of issues to see if the problem has previously been reported. If so, you may add a comment to the existing issue rather than creating a new one.
 
 
-You went through the list above and it is still something you would like to report? Then, please provide us with as much of the context, by explaininig the problem and including any additional details that would help maintainers reproduce the problem. The more details you provide in the bug report, the better.
+You went through the list above and it is still something you would like to report? Then, please provide us with as much of the context, by explaining the problem and including any additional details that would help maintainers reproduce the problem. The more details you provide in the bug report, the better.
 
 Bugs are tracked as GitHub issues. After you've determined which repository your bug is related to, create an issue on that repository and provide as much information as possible. Feel free to use the [bug report template](#bug-report-template) below if you like.
 
