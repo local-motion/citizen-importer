@@ -11,24 +11,37 @@ In general, the script:
 1. turns it into JSON 
 1. sends it to a `/citizens` endpoint
 
-Run as:
+
+## Docker
+### Run it as an executable (not a service)
 ```
-python import_citizens.py <server-endpoint> <csv-file>
+docker run --rm -v $(PWD)/samples:/imports \
+    localmotion/citizen-importer \
+    http://localhost:8082/citizens \
+    3_citizens.csv \
+    <sentry-dsn>
 ```
 
-### Run it
+### Build Docker image from source
+```
+docker build -t localmotion/citizen-importer .
+```
+
+
+## Command line
+### Run it from command line
 
 To setup:
-```commandline
+```
 virtualenv -p python3 citizens
 source citizens/bin/activate
 pip install -r requirements.txt
 ```
 
 Then to subsequently run locally:
-```commandline
+```
 source citizens/bin/activate
-python import_citizens.py http://localhost:8082/citizens samples/3_citizens.csv 
+CSV_SOURCE_DIRECTORY=$(pwd)/samples python src/import_citizens.py http://localhost:8082/citizens 3_citizens.csv <sentry-dsn> 
 ```
 
 ### Samples
