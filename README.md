@@ -1,4 +1,4 @@
-# import_citizens.py
+# import_citizens.py [![Build Status](https://travis-ci.org/local-motion/citizen-importer.svg?branch=master)](https://travis-ci.org/local-motion/citizen-importer)
 
 This importer allows to seed our database with citizens that have indicated
 that they're interested in making venues, such as children playgrounds, smoke-free.
