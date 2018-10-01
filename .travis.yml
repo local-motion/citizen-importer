@@ -1,0 +1,29 @@
+language: python
+python: 3.6
+env:
+  global:
+  - secure: ScqqKRVYcEL1PCFRqzvn/2ZQ1p1iS91uGEvW4iKHjKPbGmXKeSfXWtqdUQwbm3XhhACOweyOCqS5PV973KooIP9XubObGJD2U+oCjJvI5UHkSuGzc8WggkSFxad08D8Z5VpiPsjoB8ebeaxVy2iNkyxOWoyxc7GkGD8nJSDyWWXAIJpcpkR0kRXWXN0pNU8mqE6THS64AxovdTQlgjmztc7AB90P5BP89PyBS/4EYFA65hs/9r0nWlJCrAZAXgnpe/fzMq3/oViwLMfu+YxjHcp+0GHaxFLD9aXaYAHorLzL6TXzWGKvWVe3gtwHzceZJtOunaULBMjUVq54zwd9dPRrJwlE7tCTV2yJ7Wnm5QQFrB9c5GBXTNc9zHS+5MlFRBGJfeOpDTIINbZhD5cDxqL3kE1A8FtvxPtixNxh9YSp6F5R7ACmfh8oy+Ctw4fDb05QYzRjOCSjUhhchhJ/plGo2IKnGLR6lkqueVo+YlkfTAIazSaEHLVzomKuy1DnjxGRtWYHuo+SSpJUvJslEii9jIjQ/HmbeTOYkPVM1ktdkkBkQYGKFLkUehIlslXZX+dDNioREbcdjKjmns3P4i+dQILczzwQhPBAztakR70BHEDA0s7MDngSaqTDZrdliQHJQd3bdBJcinytMF9Wb5w4EBQpZgbTCIw+Y1qInzM=
+  - secure: WQcKwWYwh3NjCvkVDgTEzJtp1NI6SsA2p0b22uzzw12hXepCQ81w7dlChJYm+ZwzQFQ2HVDumbrQ7ToMIITgUFV/0mts73JidAHOo2fGUTh+6dBzuMGgGfcQObD2WE1eoCBchgGEcHms6edBC8ayAmXng14A5Cw8sPlFkVbi8pnT9k3s2YFREMYesRIs1l58BP1HMEau2DTR9dVyKh5aK3rm2kUeXMTRbLub0OfZjn8/dBV6U1qmpFYWOgwsVCipZHTrZPnihzil21Nu3HppKrLtCiGJ9sRvAMxiJYjU6KnfdD0BmbnHi2sDTas0vcyONkEjnRhkW6fNgJ82b3oDz0U+Rh4TbECQHmiO7R3cDtUZCoTpOJTBTjfSUKQhKMhkId6iy3b8Rt0vwcG58T46hrJw6Pud3LheB5GsM/ldxPyzP50ZP7+pox80BZY04FvlTHbSITuJCjmx4wE2QBppDfxRFCXndUqmR2CyM9DbJXC6cTdq7/e7Mh4D7KzZAj8ePLJIsgjHDKHZgrcNl/SVODlTSVMS6l9ESkoR1/4IxSCrR0HTw+xK1Y40qn3rs33e6w6Gy58MA300lvS6RTr4o1r9waIm0tbQeefrF2SB+yxtTD1VsUCnrbLPVekpXT1zIrRwD5SIB34Nkt5eypKEUl7cqH6AWzA2k+jJFZVU8vA=
+  - secure: Ohtg5EkPB8C+ulbl+MBspYizROqhkeshbtKBZqUAHxHUOk0dL6NWaRrnC9XeTTg5BLOz9sCdNNJyiYIzbF99iE8ur13nTH1VfSIr7ANa2quA8OY0Ox5T08c0BY5nt0J4w3rSB1qYKas3X3k1iAMOopDssr1M4Hqu0tHuZVPPh1KAbCTNbBz2vhuJYEy3tO5suaWELJRTEU2F7Jela2FAEzbA2iym1jZdGbkcqYIPOc9nigXg61KYp4UfQVST/fWfWaMqQNphv/6LHGatBI0e+55yNm+up5MeNwRc/A5zuY1xGz+QxgCCORYhJAI6J5nnO6CahGqYDdpwMtjghInmuMCaUfYf4aqfZpCLkt4J985yDJbfd824aBw4acLdHnLIcZVC5JXLJK/sFg6yfOHzlSTPYH4Bz9ZQU1YCxw0yrS13lOzX/Z3R4GqJl62XoS/ifW5uUFUzg24oh9/8lgwALdBEwQI3mSnW/byfnOBBS7JIkJybbeoLWnpH9zxe1H4ULJfZi3mdtKiivzt+dA/laUgeanjwdab28EfI8pjwL8kT/k6Z1wTKTPflHxwZeoRjWRgc4LkdodDHzu923wNzhBWtk4YcD9mkTpHnqeI3YcaTFPmCQXxWCd4O4CqpqvHnpCj8LMdEw5ERpw+pU+XpXL72noUDA2rUBXnxqVKDMmU=
+  - COMMIT=${TRAVIS_COMMIT::7}
+jobs:
+  include:
+  - stage: production build
+    script:
+    - pip install -r requirements.txt
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - export REPO=localmotion/community-web
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo
+      $TRAVIS_BRANCH ; fi`
+    - docker build -f Dockerfile -t $REPO:$COMMIT .
+    - docker tag $REPO:$COMMIT $REPO:$TAG
+    - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+    - docker push $REPO
+true:
+  branch: master
+notifications:
+  slack:
+    rooms:
+      secure: SrSjc29EDIqurZJVGF+bEUjiLtqpqAm+YVtCszorlkVSvr/hmHy/TdWJzFqI/BHp8GijxaA3o4VzJ735t7pgB3q+ySX2s+8f1YIyPbd4m0oPWI7pq+xL495fBVB9m5w5U/sI4mKivDcAJbJ3g24LDYj2iq8wVdaEt0KaDTo/iC1aymvdoJXHugVfqxR+QylY13h7z0wVbRyxDoL8xIV0AIkXi05F3C73FBuL/x5B/RnrXe7ZRARATvowWQBCh9o54wBQqnxdWV2HC6qlF2a5DbdcFYkgyLTqtUBLCfz7FYqiwJ5CE1d+KgAxU9qtsDfFUa369AQQUZAenbwpchMLpUgrlP+XuYKi6p4zj/8+AUoKlsTB4MSxps37siNcUTI8RNGugIRSUCADqcRpoGV7zg+jOrhn4kTvrwkJvu5Z6Hjw5/dYyn5sVbImo6raMP0E9iWR9gePvHpoqt7yk+EtXqHw79huTV4B4jtKPGXQ2eMpxcvLUJrgPsvYc8Yhemzs+hkXb6dq6fYVUXUYFhREL8f2bvaPDrGwE2C6BNEcbCDXazHOoxK3qXA8SQJadNJjftEZEmv3nbVsT/SSsePfF8SwPW/ogdneNmxXemNevJgonk0QklBx54coGH3CV4RudfQHF7JS6uMCSiiJrN4+Cy3IHoTgd0V+2F7C1wWAM6g=
+    on_success: always
+    on_failure: always
