@@ -1,2 +1,4 @@
 requests
 raven
+mailchimp3
+python-dotenv
