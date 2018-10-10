@@ -8,7 +8,12 @@ RUN pip install --install-option="--prefix=/install" -r /requirements.txt
 
 FROM base
 COPY --from=builder /install /usr/local
-COPY src /app
+
+RUN mkdir /app
+RUN mkdir /app/src
+
+COPY start.py /app
+COPY src /app/src
+
 WORKDIR /app
-ENV CSV_SOURCE_DIRECTORY /imports
-ENTRYPOINT ["python", "import_citizens.py"]
+ENTRYPOINT ["python", "start.py"]
